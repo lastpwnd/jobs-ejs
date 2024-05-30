@@ -47,14 +47,9 @@ app.get("/secretWord", (req, res) => {
   })
 
 app.post("/secretWord", (req, res) => {
-    req.session.secretWord = req.body.secretWord
-    res.redirect("/secretWord")
-})
-
-app.post("/secretWord", (req, res) => {
     if (req.body.secretWord.toUpperCase()[0] == "P") {
-      req.flash("error", "That word won't work!");
-      req.flash("error", "You can't use words that start with p.");
+      req.flash("error", "That word won't work!")
+      req.flash("error", "You can't use words that start with p.")
     } else {
       req.session.secretWord = req.body.secretWord;
       req.flash("info", "The secret word was changed.")
@@ -79,7 +74,7 @@ const start = async () => {
       console.log(`Server is listening on port ${port}...`)
     )
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
 }
 
