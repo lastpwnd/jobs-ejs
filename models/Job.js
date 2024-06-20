@@ -19,7 +19,7 @@ const JobSchema = new mongoose.Schema({
     createdBy:{
         type:mongoose.Types.ObjectId,
         ref:"User",
-        required: [, "User creds are required"]
+        required: [true, "User creds are required"]
     }
 },{timestamps:true})
 
