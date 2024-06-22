@@ -5,7 +5,6 @@ const app = express()
 const cookieParser = require('cookie-parser')
 const session = require("express-session")
 
-app.use('/css', express.static('partials'))
 app.set("view engine", "ejs")
 app.use(require("body-parser").urlencoded({ extended: true }))
 
@@ -55,7 +54,24 @@ const csrf_options = {
 
 const csrf_middleware = csrf(csrf_options); //initialise and return middlware
 
+app.use((req,res,next)=> {
+  if (req.path == "/multiply") {
+    res.set("Content-Type","application/json")
+  } else {
+    res.set("Content-Type","text/html")
+  }
+  next()
+})
 
+app.get("/multiply", (req,res)=> {
+  const result = req.query.first * req.query.second
+  if (result.isNaN) {
+    result = "NaN"
+  } else if (result == null) {
+    result = "null"
+  }
+  res.json({result: result})
+})
 
 app.use(session(sessionParms))
 app.use(require("connect-flash")()) //sessions required
@@ -89,22 +105,24 @@ app.use((req, res) => {
 })
 
 
+
 app.use((err, req, res, next) => {
   res.status(500).send(err.message)
   console.log(err)
 })
 
-const port = process.env.PORT || 3000
-
-const start = async () => {
+const port = process.env.PORT || 3000;
+const start = () => {
   try {
-    await require("./db/connect")(process.env.MONGO_URI);
-    app.listen(port, () =>
-      console.log(`Server is listening on port ${port}...`)
-    )
+    require("./db/connect")(url);
+    return app.listen(port, () =>
+      console.log(`Server is listening on port ${port}...`),
+    );
   } catch (error) {
     console.log(error)
   }
-}
+};
 
-start()
+const server = start()
+
+module.exports = { app, server }
