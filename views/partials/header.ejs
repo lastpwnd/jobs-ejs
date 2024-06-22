@@ -1,20 +1,25 @@
-<h1>The Jobs EJS Application</h1>
+<h1>The Jobs EJS App</h1>
 <% if (user) { %>
-   <p>User <%= user.name %> is logged on.</p>
+   <p>Logged in as: "<%= user.name %>"</p>
    <form method="POST" action="/sessions/logoff">
    <button>Logoff</button>
+   <input type="hidden" name="_csrf" value="<%= _csrf %>">
    </form>
 <% } %>
-<% let errorsVar = Array.from(errors) %>
-<% if (errorsVar) {errorsVar.forEach((err) => { %>
+<% if (errors) {
+    errors.forEach((err) => { %>
       <div>
         Error: <%= err %>
       </div>
-    <% })} %>
-  <% let infoVar = Array.from(info) %>
-  <% if (infoVar) {infoVar.forEach((msg) => { %>
+    <% })
+  } %>
+  <% if (info) {
+    info.forEach((msg) => { %>
       <div>
         Info: <%= msg %>
       </div>
-    <% })  } %>
+    <% })
+  } %>
 <hr />
+
+
